@@ -1,0 +1,63 @@
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+
+public class Sender extends JFrame {
+    private JFrame LivingRoomListFrame;
+    private JLabel ComponentLabel;
+
+    private DefaultListModel model;
+
+    private JList list;
+
+    Observable observable;
+
+    public HomeComponent(Observable observable) {
+        this.observable = observable;
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(300, 200);
+        setLocation(900, 400);
+        setLayout(null);
+        setVisible(true);
+
+        ComponentLabel = new JLabel("Home Component");
+        ComponentLabel.setFont(new Font("", 1, 20));
+        ComponentLabel.setHorizontalAlignment(JLabel.CENTER);
+        ComponentLabel.setBounds(70, 50, 600, 200);
+        ComponentLabel.setVerticalAlignment(JLabel.TOP);
+        ComponentLabel.setBounds(0, 0, 300, 35);
+        ComponentLabel.setBackground(new Color(32, 178, 170));
+        ComponentLabel.setForeground(Color.BLACK);
+        ComponentLabel.setOpaque(true);
+        ComponentLabel.setBorder(new LineBorder(Color.BLUE, 2));
+
+        model = new DefaultListModel();
+        model.addElement("Speaker");
+        model.addElement("Window");
+        model.addElement("TV");
+        //model.addElement("TV Dining Room");
+        list = new JList(model);
+
+        list.setFont(new Font("", 1, 14));
+        list.setForeground(Color.BLUE);
+        list.setBounds(0, 40, 300, 200);
+
+        list.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting() && !list.isSelectionEmpty()) {
+                    String name = "" + list.getSelectedValue();
+                    int index = list.getSelectedIndex();
+                    observable.setIndex(index);
+                    new TimeComponent(name, observable).setVisible(true);
+
+                }
+            }
+        });
+        add(ComponentLabel);
+        add(list);
+
+    }
+}
